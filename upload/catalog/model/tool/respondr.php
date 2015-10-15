@@ -33,6 +33,23 @@ class ModelToolRespondr extends Model {
 			$this->load->model('account/customer');
 		}
 	}
+
+	private function sanitizeString($string) {
+		$string = str_replace("\r\n", '<br>', $string);
+		$string = str_replace("\n", '<br>', $string);
+		$string = str_replace("\r", '<br>', $string);
+		$string = str_replace("\t", '', $string);
+		$string = str_replace("\"", '\\"', $string);
+		$string = str_replace("&quot;", '\\"', $string);
+		$string = html_entity_decode($string);
+		$string = str_replace("&#39;", '\'', $string);
+		$string = str_replace("&deg;", '°', $string);
+
+		// since an ambersand seems to kill the upload, we remove the remaining ones for now.
+		$string = str_replace("&", '', $string);
+
+		return $string;
+	}
 	
 	// Track a page view
 	private function trackPageView() {
@@ -85,8 +102,8 @@ class ModelToolRespondr extends Model {
 			}
 			
 			$respondr_name = $product_info['name'];
-			$respondr_description = $product_info['description'];
-			$respondr_image = 'http:// " + window.location.host + "/image/' . $product_info['image'];
+			$respondr_description = $this->sanitizeString($product_info['description']);
+			$respondr_image = 'http://" + window.location.host + "/image/' . $product_info['image'];
 			$respondr_price = (string)$product_info['price'];
 	
 			// Return the javascript text to insert into footer	
@@ -96,7 +113,7 @@ class ModelToolRespondr extends Model {
 					'categories: "",' . "\n" .
 					'price: "' . $respondr_price . '",' . "\n" .
 					'imageUrl: "' . $respondr_image . '",' . "\n" .
-					'desc: "' . urlencode($respondr_description) . '"' . "\n" .
+					'desc: "' . $respondr_description . '"' . "\n" .
 				'}]);' . "\n";
 
 		} else {
@@ -130,8 +147,8 @@ class ModelToolRespondr extends Model {
 					$respondr_sku = $product_id;
 				}
 				$respondr_name = $product_info['name'];
-				$respondr_description = $product_info['description'];
-				$respondr_image = 'http:// " + window.location.host + "/image/' . $product_info['image'];
+				$respondr_description = $this->sanitizeString($product_info['description']);
+				$respondr_image = 'http://" + window.location.host + "/image/' . $product_info['image'];
 				$respondr_price = (string)$product_info['price'];
 
 				$returnString .= '_raq.push(["updateEcommerceItem", {' . "\n" .
@@ -140,7 +157,7 @@ class ModelToolRespondr extends Model {
 						'categories: "",' . "\n" .
 						'price: "' . $respondr_price . '",' . "\n" .
 						'imageUrl: "' . $respondr_image . '",' . "\n" .
-						'desc: "' . urlencode($respondr_description) . '",' . "\n" .
+						'desc: "' . $respondr_description . '",' . "\n" .
 						'qty: "' . $cart_item['quantity'] . '"' . "\n" .
 					'}]);' . "\n";
 
@@ -192,8 +209,8 @@ class ModelToolRespondr extends Model {
 					$respondr_sku = $product_id;
 				}
 				$respondr_name = $product_info['name'];
-				$respondr_description = $product_info['description'];
-				$respondr_image = 'http:// " + window.location.host + "/image/' . $product_info['image'];
+				$respondr_description = $this->sanitizeString($product_info['description']);
+				$respondr_image = 'http://" + window.location.host + "/image/' . $product_info['image'];
 				$respondr_price = (string)$product_info['price'];
 
 				$returnString .= '_raq.push(["updateEcommerceItem", {' . "\n" .
@@ -202,7 +219,7 @@ class ModelToolRespondr extends Model {
 						'categories: "",' . "\n" .
 						'price: "' . $respondr_price . '",' . "\n" .
 						'imageUrl: "' . $respondr_image . '",' . "\n" .
-						'desc: "' . urlencode($respondr_description) . '",' . "\n" .
+						'desc: "' . $respondr_description . '",' . "\n" .
 						'qty: "' . $order_product['quantity'] . '"' . "\n" .
 					'}]);' . "\n";
 			}
@@ -243,7 +260,7 @@ class ModelToolRespondr extends Model {
 			}
 
 			$returnString .= '_raq.push(["trackEcommerceOrder", {' . "\n" .
-					'orderId: "' . $order_id . '",' . "\n" .
+					'id: "' . $order_id . '",' . "\n" .
 					'total: "' . $order_grandtotal . '",' . "\n" .
 					'subTotal: "' . $order_subtotal . '",' . "\n" .
 					'tax: "' . $order_taxes . '",' . "\n" .
