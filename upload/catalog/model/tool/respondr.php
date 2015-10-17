@@ -196,6 +196,13 @@ class ModelToolRespondr extends Model {
 			$order_info_products = $this->model_account_order->getOrderProducts($order_id);
 			$order_info_totals = $this->model_account_order->getOrderTotals($order_id);
 
+			$returnString .= '_raq.push(["saveContact", {' . "\n" .
+					'email: "' . $order_info['email'] . '",' . "\n" .
+					'firstName: "' . $order_info['firstname'] . '",' . "\n" .
+					'lastName: "' . $order_info['lastname'] . '",' . "\n" .
+					'phone: "' . $order_info['telephone'] . '"' . "\n" .
+				'}]);' . "\n";
+
 			// Add ecommerce items for each product in the order before tracking
 			foreach ($order_info_products as $order_product) {
 				// Get the info for this product ID
