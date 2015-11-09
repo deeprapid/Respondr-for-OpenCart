@@ -56,7 +56,7 @@
 			<search position="after"><![CDATA[function index() {]]></search>
 			<add><![CDATA[
 		// BOF - Respondr Opencart mod
-		if ( isset($this->session->data['order_id']) and ( ! empty($this->session->data['order_id']))  ) {
+		if ( $this->config->get('respondr_enable') and isset($this->session->data['order_id']) and ( ! empty($this->session->data['order_id']))  ) {
 			$this->session->data['last_order_id'] = $this->session->data['order_id'];
 			
 			$this->load->model('tool/respondr');
