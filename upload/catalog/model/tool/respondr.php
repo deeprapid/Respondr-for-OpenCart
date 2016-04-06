@@ -108,6 +108,7 @@ class ModelToolRespondr extends Model {
 	
 			// Return the javascript text to insert into footer	
 			return '_raq.push(["trackProductView", {' . "\n" .
+					'externalId: "' . $this->request->get['product_id'] . '",' . "\n" .
 					'sku: "' . $respondr_sku . '",' . "\n" .
 					'name: "' . $respondr_name . '",' . "\n" .
 					'categories: "",' . "\n" .
@@ -152,6 +153,7 @@ class ModelToolRespondr extends Model {
 				$respondr_price = (string)$product_info['price'];
 
 				$returnString .= '_raq.push(["updateEcommerceItem", {' . "\n" .
+						'externalId: "' . $product_id . '",' . "\n" .
 						'sku: "' . $respondr_sku . '",' . "\n" .
 						'name: "' . $respondr_name . '",' . "\n" .
 						'categories: "",' . "\n" .
@@ -221,6 +223,7 @@ class ModelToolRespondr extends Model {
 				$respondr_price = (string)$product_info['price'];
 
 				$returnString .= '_raq.push(["updateEcommerceItem", {' . "\n" .
+						'externalId: "' . $product_id . '",' . "\n" .
 						'sku: "' . $respondr_sku . '",' . "\n" .
 						'name: "' . $respondr_name . '",' . "\n" .
 						'categories: "",' . "\n" .
